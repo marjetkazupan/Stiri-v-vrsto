@@ -9,6 +9,7 @@ Pred Vami je igra za dva igralca.
  
 Prične se s prazno igralno površino velikosti 4×4, na katero igralca izmenično postavljata figure.
 Te se razlikujejo v štirih lastnostih - vsaka figura je:
+
     - svetla ali temna
     - z ozadjem ali brez
     - kvadratna ali okrogla
