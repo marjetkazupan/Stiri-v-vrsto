@@ -1,5 +1,7 @@
 STEVILO_LASTNOSTI = 4
 ZMAGA = "W"
+ZACETEK = "Z"
+
 # Zmaga kvadrat samo za 4 lastnosti
 # Število lastnosti naj izberejo, ne vpišejo (ali pa daj navodilo in check)
 
@@ -110,6 +112,28 @@ class Igra:
 
 def nova_igra():
     return Igra()
+
+
+class Stiri_v_vrsto:
+    def __init__(self) -> None:
+        self.igre = {}
+
+    def prost_id_igre(self):
+        if not self.igre:
+            return 0
+        else:
+            return max(self.igre.keys()) + 1
+    
+    def nova_igra(self):
+        i = self.prost_id_igre()
+        igra = nova_igra()
+        self.igre[i] = (igra, ZACETEK)
+        return i
+
+    def ugibaj(self, i, figura, mesto):
+        igra, stanje = self.igre[i]
+        stanje = igra.igraj(figura, mesto)
+        self.igre[i] = (igra, stanje)
 
 
 igra0 = Igra()
