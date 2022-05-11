@@ -14,7 +14,8 @@ class Figura:
         self.oblika = oblika
         self.luknja = luknja
         self.ozadje = ozadje
-        self.lastnosti = (self.barva, self.oblika, self.luknja, self.ozadje)
+        self.lastnosti = (barva, oblika, luknja, ozadje)
+        self.string = f"{barva}{oblika}{luknja}{ozadje}"
     # Lastnosti figur bomo pisali z 0 in 1 - Figura(0, 0, 0, 0) je svetla okrogla figura brez luknje in brez ozadja.
 
     def __repr__(self) -> str:
@@ -130,7 +131,7 @@ class Stiri_v_vrsto:
         self.igre[i] = (igra, ZACETEK)
         return i
 
-    def ugibaj(self, i, figura, mesto):
+    def igraj(self, i, figura, mesto):
         igra, stanje = self.igre[i]
         stanje = igra.igraj(figura, mesto)
         self.igre[i] = (igra, stanje)
