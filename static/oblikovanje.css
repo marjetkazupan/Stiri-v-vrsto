@@ -1,0 +1,5 @@
+table, tr, td {
+    aspect-ratio: 1 / 1;
+    border: 1px solid;
+    border-collapse: collapse;
+  }
