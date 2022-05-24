@@ -15,11 +15,13 @@ class Figura:
         self.luknja = luknja
         self.ozadje = ozadje
         self.lastnosti = (barva, oblika, luknja, ozadje)
-        self.string = f"{barva}{oblika}{luknja}{ozadje}"
     # Lastnosti figur bomo pisali z 0 in 1 - Figura(0, 0, 0, 0) je svetla okrogla figura brez luknje in brez ozadja.
 
     def __repr__(self) -> str:
         return f"Figura{self.lastnosti}"
+
+    def __str__(self) -> str:
+        return f"{self.barva}{self.oblika}{self.luknja}{self.ozadje}"
 
     def __eq__(self, other) -> bool:
         if isinstance(other, Figura):
@@ -161,11 +163,3 @@ igra4.igraj(Figura(0, 1, 1, 0), (0, 1))
 igra4.igraj(Figura(0, 1, 0, 1), (1, 0))
 
 
-class Statistika:
-    pass
-
-
-class Igralec:
-
-    def __init__(self, ime) -> None:
-        self.ime = ime

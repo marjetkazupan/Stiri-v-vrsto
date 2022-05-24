@@ -1,0 +1,31 @@
+% rebase('base.html', izbrani_zavihek='igra')
+
+  <div class="row">
+    <div id="figure" class="column">
+      % for figura in figure:
+        <img src="/static/img/{{figura}}.png" width="100" height="100">
+      % end 
+    </div>
+  
+    <div id="deska" class="column">
+      <table>
+      % for j in range(velikost):
+        <tr> 
+        % for i in range(velikost):
+          <td class="st"><img src="/static/img/{{plosca.get((i, j), 0)}}.png" width="100" height="100"></td> 
+        % end
+        </tr>
+      % end
+      </table>
+    </div>
+  </div>
+
+  % if stanje != model.ZMAGA:
+    <form action="" method="post">
+      <input name="figura" autofocus> <input name="mesto" autofocus> <input type="submit" value="Potrdi">
+    </form>
+  % end
+
+  % if stanje == model.ZMAGA:
+    KONEC! Zmagal je igralec {{len(plosca) % 2}}.
+  % end

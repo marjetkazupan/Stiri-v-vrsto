@@ -1,0 +1,27 @@
+.st {
+    padding-right: 5px;
+}
+
+.item {
+    list-style: circle inside;
+    margin-left: 40px;
+}
+
+.sez {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.column {
+    width: 50%;
+    padding-left: 1cm;
+    padding-top: 0.5cm
+}
+
+#figure {
+    float: right;
+}
+
+#deska {
+    float: left;
+}
