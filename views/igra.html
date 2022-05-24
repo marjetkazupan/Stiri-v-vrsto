@@ -1,9 +1,43 @@
 % rebase('base.html', izbrani_zavihek='igra')
 
+<script
+src="https://code.jquery.com/jquery-3.6.0.min.js"
+integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+crossorigin="anonymous"></script>
+<script>
+let SELECTED = null;
+$(function() {
+$(".figura").click(function(e){
+    var e = $(e.target);
+    var id = e.attr("id");
+    if (id != SELECTED) {
+        $(".figura").removeClass("selected");
+        e.addClass("selected");
+        SELECTED = e.attr("id");
+    } else {
+        $(".figura").removeClass("selected");
+        SELECTED = null;
+    }
+});
+
+$(".polje").click(function(e){
+    var e = $(e.target);
+    var id = e.attr("id");
+    if (SELECTED !== null) {
+        $('input[name="figura"]').attr("value", SELECTED);
+        $('input[name="mesto"]').attr("value", id);
+        $("#form").submit();
+    }
+});
+
+$("#form-container").hide();
+});
+</script>
+
   <div class="row">
     <div id="figure" class="column">
       % for figura in figure:
-        <img src="/static/img/{{figura}}.png" width="100" height="100">
+        <img src="/static/img/{{figura}}.png" id="{{figura}}" class="figura" width="100" height="100">
       % end 
     </div>
   
@@ -12,7 +46,7 @@
       % for j in range(velikost):
         <tr> 
         % for i in range(velikost):
-          <td class="st"><img src="/static/img/{{plosca.get((i, j), 0)}}.png" width="100" height="100"></td> 
+          <td class="st"><img src="/static/img/{{plosca.get((i, j), 0)}}.png" class="polje" id="{{i}}{{j}}" width="100" height="100"></td> 
         % end
         </tr>
       % end
@@ -21,9 +55,11 @@
   </div>
 
   % if stanje != model.ZMAGA:
-    <form action="" method="post">
+  <div id="form-container">
+    <form action="" method="post" id="form">
       <input name="figura" autofocus> <input name="mesto" autofocus> <input type="submit" value="Potrdi">
     </form>
+  </div>
   % end
 
   % if stanje == model.ZMAGA:
