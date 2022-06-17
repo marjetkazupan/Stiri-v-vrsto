@@ -34,7 +34,7 @@ vse_figure = [Figura(c, s, h, b) for (c, s, h, b) in list(product([0, 1], repeat
 
 class Igra:
 
-    def __init__(self, plosca=None, figure=None) -> None:
+    def __init__(self, plosca=None, figure=None, kvadrat=False) -> None:
         if plosca is not None:
             self.plosca = plosca
         else:
@@ -43,67 +43,43 @@ class Igra:
             self.figure = figure
         else:
             self.figure = vse_figure.copy()
+        self.kvadrat = kvadrat
 
     def zmaga(self, mesto):
-        # Preveri zmago; podamo še mesto spremembe (kam smo postavili figuro), da se izognemo nepotrebnim preverjanjem.
-        i, j = mesto[0], mesto[1]
+        # Funkcija preveri zmago (ali se je igra v tej potezi končala); 
+        # funkciji podamo še mesto spremembe (kam smo postavili figuro), da se izognemo nepotrebnim preverjanjem.
+        i, j = mesto
 
-        # S seznamom vsote bomo preverjali, ali se figure v vrstici, stolpcu ali na diagonali 
-        # ujemajo v kateri izmed lastnosti. Ker imajo lastnosti številsko vrednost 0 ali 1, 
-        # lahko te vrednosti seštejemo. Figure se v eni izmed lastnosti ujemajo natanko tedaj, 
-        # ko je ustrezna vsota enaka 0 (vse lastnosti so 0) ali 4 (vse lastnosti so 1).
-        # Na prva štiri mesta bomo zapisali vsota lastnosti v stolpcu, na naslednja štiri v vrstici,
-        # na zadnja štiri pa v diagonali (če se figura nahaja na kazteri izmed diagonal).
-        vsote = [0 for _ in range(3 * velikost_plosce)]
+        # Naredimo seznam seznamov figur, ki so postavljene na mesta, ki tvorijo vrsto in na katerih bi potencialno lahko prišlo do zmage. 
+        # Najprej dodamo seznam figur v stolpcu in seznam figur v vrstici.
+        mozne_zmage = [
+            [self.plosca.get((x, j)) for x in range(velikost_plosce)],
+            [self.plosca.get((i, x)) for x in range(velikost_plosce)]
+        ]
 
-        # Definiramo spremenljivke st, vr in diag, ki poskrbijo za to, da se funkcija 
-        # predčasno prekine, če v stolpcu/vrstici/na diagonali sploh ni štirih figur.
-        st, vr, diag = True, True, False
-
-        for x in range(velikost_plosce):
-
-            fig_st = self.plosca.get((x, j))
-            fig_vr = self.plosca.get((i, x))
-
-            # Če figure na ustreznem mestu ni, st oz. vr spremenimo na vrednost False.
-            if fig_st == None:
-                st = False
-            if fig_vr == None:
-                vr = False
-
-            # Preverimo, ali je bila figura postavljena na diagonalo (v nasprotnem primeru zmage
-            # na diagonali sploh ni treba preverjati).
-            if i == j or i == 3 - j:
-                diag = True
-                if i == j:
-                    fig_diag = self.plosca.get((x, x))
-                if i == 3 - j:
-                    fig_diag = self.plosca.get((x, 3 - x))
-                if fig_diag == None:
-                    diag = False
-
-            # Ustavimo funkcijo, če niti v stolpcu niti v vrstici niti na diagonali ni štirih figur.
-            if not(vr or st or diag):
-                return False
-
-            # Za vsako izmed lastnosti ustreznemu elementu seznama vsote pristejemo njeno vrednost.
-            # Dodamo še 1, saj je 0 enota za seštevanje in tako ne bi opazili spremembe.
-            for last in range(STEVILO_LASTNOSTI):
-                if st:
-                    vsote[last] += fig_st.lastnosti[last] + 1
-                if vr:
-                    vsote[3 + last] += fig_vr.lastnosti[last] + 1
-                if diag:
-                    vsote[7 + last] += fig_diag.lastnosti[last] + 1
-        return 4 in vsote or 8 in vsote
-
-    def zmaga_kvadrat(self):
-        for i in range(3):
-            for j in range(3):
-                for last in range(4):
-                    vsota = self.plosca.get((i, j)).lastnosti[last] + self.plosca.get((i + 1, j)).lastnosti[last] + self.plosca.get((i, j + 1)).lastnosti[last] + self.plosca.get((i + 1, j + 1)).lastnosti[last]
-                    if vsota == 0 or vsota == 4:
-                        return True
+        # Preverimo, ali je mesto, na katero smo postavili figuro, na diagonali. Če je, dodamo še diagonalo.
+        if i == j:
+            mozne_zmage.append([self.plosca.get((x, x)) for x in range(velikost_plosce)])
+        
+        if i == velikost_plosce - 1 - j:
+            mozne_zmage.append([self.plosca.get((x, velikost_plosce - 1 - x)) for x in range(velikost_plosce)])
+            
+        # Če je vklopljeno izbirno pravilo za zmago, dodamo še vse možne 2 * 2 kvadratke. To pravilo lahko uporabimo le na mreži 4 * 4.
+        if self.kvadrat:
+            kv = [(i, j), (i, j - 1), (i - 1, j), (i - 1, j - 1)]
+            for x, y in kv:
+                mozne_zmage.append([self.plosca.get((x, y)), self.plosca.get((x + 1, y)), self.plosca.get((x, y + 1)), self.plosca.get((x + 1, y + 1))])
+        
+        # Preverimo ujemanje figur.
+        for seznam in mozne_zmage:
+            if None in seznam:
+                continue
+            vsota = [0 for _ in range(STEVILO_LASTNOSTI)]
+            for figura in seznam:
+                for last in range(STEVILO_LASTNOSTI):
+                    vsota[last] += figura.lastnosti[last]
+            if 0 in vsota or 4 in vsota:
+                return True
         return False
 
     def igraj(self, figura, mesto):
@@ -137,29 +113,3 @@ class Stiri_v_vrsto:
         igra, stanje = self.igre[i]
         stanje = igra.igraj(figura, mesto)
         self.igre[i] = (igra, stanje)
-
-
-igra0 = Igra()
-
-igra1 = Igra()
-igra1.igraj(Figura(0, 0, 0, 0), (2, 1))
-
-igra2 = Igra()
-igra2.igraj(Figura(0, 0, 0, 0), (2, 1))
-igra2.igraj(Figura(0, 1, 1, 1), (0, 1))
-igra2.igraj(Figura(0, 1, 1, 0), (3, 1))
-igra2.igraj(Figura(0, 1, 0, 1), (1, 1))
-
-igra3 = Igra()
-igra3.igraj(Figura(0, 0, 0, 0), (1, 1))
-igra3.igraj(Figura(0, 1, 1, 1), (0, 0))
-igra3.igraj(Figura(0, 1, 1, 0), (3, 3))
-igra3.igraj(Figura(0, 1, 0, 1), (2, 2))
-
-igra4 = Igra()
-igra4.igraj(Figura(1, 1, 0, 0), (1, 1))
-igra4.igraj(Figura(0, 1, 1, 1), (0, 0))
-igra4.igraj(Figura(0, 1, 1, 0), (0, 1))
-igra4.igraj(Figura(0, 1, 0, 1), (1, 0))
-
-
