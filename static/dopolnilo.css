@@ -2,6 +2,15 @@
     padding-right: 5px;
 }
 
+.vr {
+    padding-bottom: 0px;
+}
+
+.figura, .fig {
+    border: 2pt solid;
+    border-color: white;
+}
+
 .item {
     list-style: circle inside;
     margin-left: 40px;
@@ -15,6 +24,7 @@
 .column {
     width: 50%;
     padding-left: 1cm;
+    padding-right: 1cm;
     padding-top: 0.5cm
 }
 
@@ -27,6 +37,6 @@
 }
 
 .selected {
-    border: 3pt solid;
-    border-color: blue;
+    border: 2pt solid;
+    border-color: darkblue;
 }
