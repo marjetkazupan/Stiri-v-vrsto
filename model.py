@@ -15,7 +15,8 @@ class Figura:
         self.luknja = luknja
         self.ozadje = ozadje
         self.lastnosti = (barva, oblika, luknja, ozadje)
-    # Lastnosti figur bomo pisali z 0 in 1 - Figura(0, 0, 0, 0) je svetla okrogla figura brez luknje in brez ozadja.
+    # Lastnosti figur bomo pisali z 0 in 1 - Figura(0, 0, 0, 0) je svetla okrogla 
+    # figura brez luknje in brez ozadja.
 
     def __repr__(self) -> str:
         return f"Figura{self.lastnosti}"
@@ -47,10 +48,12 @@ class Igra:
 
     def zmaga(self, mesto):
         # Funkcija preveri zmago (ali se je igra v tej potezi končala); 
-        # funkciji podamo še mesto spremembe (kam smo postavili figuro), da se izognemo nepotrebnim preverjanjem.
+        # funkciji podamo še mesto spremembe (kam smo postavili figuro), 
+        # da se izognemo nepotrebnim preverjanjem.
         i, j = mesto
 
-        # Naredimo seznam seznamov figur, ki so postavljene na mesta, ki tvorijo vrsto in na katerih bi potencialno lahko prišlo do zmage. 
+        # Naredimo seznam seznamov figur, ki so postavljene na mesta, ki tvorijo vrsto 
+        # in na katerih bi potencialno lahko prišlo do zmage. 
         # Najprej dodamo seznam figur v stolpcu in seznam figur v vrstici.
         mozne_zmage = [
             [self.plosca.get((x, j)) for x in range(velikost_plosce)],
@@ -64,7 +67,8 @@ class Igra:
         if i == velikost_plosce - 1 - j:
             mozne_zmage.append([self.plosca.get((x, velikost_plosce - 1 - x)) for x in range(velikost_plosce)])
             
-        # Če je vklopljeno izbirno pravilo za zmago, dodamo še vse možne 2 * 2 kvadratke. To pravilo lahko uporabimo le na mreži 4 * 4.
+        # Če je vklopljeno izbirno pravilo za zmago, dodamo še vse možne 2 * 2 kvadratke. 
+        # To pravilo lahko uporabimo le na mreži 4 * 4.
         if self.kvadrat:
             kv = [(i, j), (i, j - 1), (i - 1, j), (i - 1, j - 1)]
             for x, y in kv:
@@ -87,6 +91,15 @@ class Igra:
         self.plosca[mesto] = figura
         if self.zmaga(mesto):
             return ZMAGA
+    
+    def figurce(self):
+        fig = self.figure.copy()
+        while len(fig) != velikost_plosce ** 2:
+            fig.append(1)
+        figure = []
+        for i in range(velikost_plosce):
+            figure.append(fig[velikost_plosce * i : velikost_plosce * i + velikost_plosce])
+        return figure
 
 
 def nova_igra():

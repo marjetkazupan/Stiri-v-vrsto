@@ -38,26 +38,39 @@ $("#form-container").hide();
   <article class="message is-info">
     <div class="message-header">
       <p>Konec!</p>
-      <button class="delete" aria-label="delete"></button>
+      <button class="delete" aria-label="delete" onclick="this.parentElement.parentElement.style.display='none'"></button>
     </div>
     <div class="message-body">
       <p>Igra je končana! Zmagal je <strong>igralec {{len(plosca) % 2}}</strong>.</p>
       <p>Če želite igrati ponovno, pritisnite gumb <em>nova igra</em> na dnu strani.</p>
     </div>
   </article>
-% end
-
-% if len(plosca) == 16:
+% elif len(plosca) == 16:
   <article class="message is-info">
     <div class="message-header">
       <p>Konec!</p>
-      <button class="delete" aria-label="delete"></button>
+      <button class="delete" aria-label="delete" onclick="this.parentElement.parentElement.style.display='none'"></button>
     </div>
     <div class="message-body">
       <p>Igra je končana! Vse figure so postavljene na ploščo. Rezultat je izenačen.</p>
       <p>Če želite igrati ponovno, pritisnite gumb <em>nova igra</em> na dnu strani.</p>
     </div>
   </article>
+% end
+
+% if len(plosca) == 0:
+<article class="message is-info">
+  <div class="message-body">
+    <div class="field has-addons">
+      <p>Če želite, da se rezultat igre vpiše v statistiko, pred začetkom igre vpišite svoje ime.</p>
+      <form action="/nova_igra/" method="get">
+        <div class="vpis">
+          <button type="submit" class="button is-medium is-info">Vpis</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</article>
 % end
 
 <div class="row">
@@ -82,7 +95,11 @@ $("#form-container").hide();
     % for j in range(velikost):
       <tr> 
       % for i in range(velikost):
-        <td class="st"><img src="/static/img/{{plosca.get((i, j), 0)}}.png" class="polje" id="{{i}}{{j}}" width="100" height="100"></td> 
+        % if plosca.get((i, j), 0) != 0:
+          <td class="st"><img src="/static/img/{{plosca.get((i, j), 0)}}.png" width="100" height="100"></td> 
+        % else:
+          <td class="st"><img src="/static/img/0.png" class="polje" id="{{i}}{{j}}" width="100" height="100"></td>
+        % end
       % end
       </tr>
     % end
@@ -98,7 +115,7 @@ $("#form-container").hide();
 </div>
 % end
 
-<form action="/nova_igra/" method="get">
+<form action="/igraj/" method="get">
   <div class="nova_igra">
     <button type="submit" class="button is-medium is-info is-light">Nova igra</button>
   </div>

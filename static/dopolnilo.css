@@ -40,3 +40,17 @@
     border: 2pt solid;
     border-color: darkblue;
 }
+
+.nova_igra {
+    float: right;
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+
+.izbira {
+    padding: 10px;
+}
+
+.vpis {
+    padding-left: 100px;
+}
