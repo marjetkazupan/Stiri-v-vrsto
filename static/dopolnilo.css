@@ -44,7 +44,7 @@
 .nova_igra {
     float: right;
     padding-top: 50px;
-    padding-bottom: 20px;
+    padding-bottom: 50px;
 }
 
 .izbira {
@@ -53,4 +53,15 @@
 
 .vpis {
     padding-left: 100px;
+}
+
+.igraj {
+    padding-left: 200px;
+    padding-bottom: 20px;
+}
+
+.stat {
+    padding-top: 10px;
+    padding-bottom: 30px;
+    padding-left: 150px;
 }

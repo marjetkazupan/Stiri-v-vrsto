@@ -1,0 +1,22 @@
+% rebase('base.html', izbrani_zavihek='igra')
+
+<article class="message is-info">
+  <div class="message-header">
+    <p>Kdo želi igrati?</p>
+  </div>
+  <div class="message-body">
+    <p>Prosim, izberite igralca.</p>
+    <form action="/igraj/" method="POST">
+      <div class="izbira">
+        % include('_izberi_igralca.html', name='igralec0', oznaka='Igralec 1')
+      </div>
+      <div class="izbira">
+        % include('_izberi_igralca.html', name='igralec1', oznaka='Igralec 2')
+      </div>
+      <div class="control igraj">
+        <button class="button is-info">Igraj</button>
+      </div>
+    </form>
+    <p>Če vašega imena ni na seznamu, se morate registrirati.</p>
+  </div>
+</article>

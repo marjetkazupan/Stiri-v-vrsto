@@ -1,0 +1,17 @@
+<div class="control has-icons-left">
+  <div class="select">
+    <select name="{{name}}">
+      % if defined('oznaka'):
+        <option disabled selected>{{oznaka}}</option>
+      % end
+      % for id_uporabnika, uporabnik in enumerate(vse_skupaj.uporabniki):
+      <option value="{{id_uporabnika}}">
+        {{uporabnik.uporabnisko_ime}}
+      </option>
+      % end
+    </select>
+  </div>
+  <span class="icon is-small is-left">
+    <i class="fas fa-user"></i>
+  </span>
+</div>

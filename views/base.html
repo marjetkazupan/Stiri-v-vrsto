@@ -56,6 +56,24 @@
           % end
         </div>
         <div class="navbar-end">
+          <div class="navbar-item">
+            <div class="buttons">
+              % if defined('uporabnisko_ime'):
+              <form method="POST" action="/odjava/">
+                <button class="button is-info is-light">
+                  Odjava
+                </button>
+              </form>
+              % else:
+              <a class="button is-info is-light is-outlined" href="/registracija/">
+                Registracija
+              </a>
+              <a class="button is-info" href="/prijava/">
+                Prijava
+              </a>
+              % end
+            </div>
+          </div>
           <a class="navbar-item" href="https://github.com/marjetkazupan/Stiri-v-vrsto">
             <span class="icon">
               <i class="fab fa-github"></i>

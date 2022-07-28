@@ -1,0 +1,80 @@
+% rebase('base.html', izbrani_zavihek='statistika')
+
+<div class="columns">
+  <div class="column is-one-quarter">
+    <nav class="panel">
+      <p class="panel-heading">
+        <i class="fas fa-user-circle"></i>
+        {{uporabnisko_ime}}
+      </p>
+      <div class="panel-block">
+        <ul>
+          <li><strong>Odigrane igre:</strong> {{stat.odigrane_igre()}}</li>
+          <li><strong>Zmage:</strong> {{stat.prestej(3)}}</li>
+          <li><strong>Porazi:</strong> {{stat.prestej(-1)}}</li>
+          <li><strong>Neodločeno:</strong> {{stat.prestej(0)}}</li>
+        </ul>
+      </div>
+    </nav>
+    <nav class="panel">
+      <p class="panel-heading">
+        <i class="fas fa-trophy"></i>
+        Najboljši igralci
+      </p>
+      <div class="panel-block">
+        <table class="table is-fullwidth">
+          % for uporabnik in top5:
+            <tr>
+              <td><strong>{{uporabnik.uporabnisko_ime}}</strong></td>
+              <td>{{uporabnik.zgodovina.rating()}}</td>
+            </tr>
+          % end          
+        </table>
+
+      </div>
+    </nav>
+  </div>
+
+  <div class="column">
+    <h1 class="title">Moje igre</h1>
+    <table class="table is-hoverable is-fullwidth">
+      <thead>
+        <tr>
+          <th>Nasprotnik</th>
+          <th>
+              <i class="far fa-calendar"></i>
+              Datum
+          </th>
+          <th>Izid</th>
+          <th>Prvi na potezi</th>
+          <th>Število potez</th>
+        </tr>
+      </thead>
+      <tbody>
+        % for dvoboj in sorted(stat.dvoboji, key=lambda dvoboj: dvoboj.datum, reverse=True):
+        <tr>
+          <td>{{dvoboj.nasprotnik}}</td>
+          <td>{{dvoboj.datum}}</td>
+          <td>
+            % if dvoboj.zmaga == 3:
+              {{ZMAGA}}
+            % elif dvoboj.zmaga == 1:
+              {{NEODLOCENO}}
+            % else:
+              {{PORAZ}}
+            % end              
+          </td>
+          <td>
+            % if dvoboj.zacel:
+              {{JAZ}}
+            % else:
+              {{NASPROTNIK}}
+            % end
+          </td>
+          <td>{{dvoboj.poteza}}</td>
+        </tr>
+      % end
+      </tbody>
+    </table>
+  </div>
+</div>
