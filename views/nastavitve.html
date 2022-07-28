@@ -1,0 +1,17 @@
+% rebase('base.html', izbrani_zavihek='nastavitve')
+
+<article class="message is-info">
+  <div class="message-body">
+    <form action="/nastavitve/" method="POST">
+      % if kvadrat == "da":
+      <input id="switchRoundedInfo" type="checkbox" name="kvadrat" class="switch is-rounded is-info" value="da" checked>
+      % else:
+      <input id="switchRoundedInfo" type="checkbox" name="kvadrat" class="switch is-rounded is-info" value="da">
+      % end
+      <label for="switchRoundedInfo">Switch rounded info</label>
+      <div class="control stat">
+        <button class="button is-info">Shrani</button>
+      </div>
+    </form>
+  </div>
+</article>

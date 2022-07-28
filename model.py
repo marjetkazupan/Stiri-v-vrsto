@@ -110,8 +110,8 @@ class Igra:
         return figure
 
 
-def nova_igra():
-    return Igra()
+def nova_igra(k=False):
+    return Igra(kvadrat=k)
 
 def preveri_input(f, m):
     if len(f) != STEVILO_LASTNOSTI:
@@ -136,9 +136,9 @@ class Stiri_v_vrsto:
         else:
             return max(self.igre.keys()) + 1
     
-    def nova_igra(self):
+    def nova_igra(self, k=False):
         i = self.prost_id_igre()
-        igra = nova_igra()
+        igra = nova_igra(k)
         self.igre[i] = (igra, ZACETEK)
         return i
     

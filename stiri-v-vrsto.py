@@ -16,7 +16,7 @@ def poisci_ime_igralca(vse_skupaj, ime_polja):
     return vse_skupaj.uporabniki[int(id_igralca)].uporabnisko_ime if id_igralca else None
 
 def vpisi_igro(stanje, turn):
-    igralec1, igralec2 = bottle.request.get_cookie("igralec0"), bottle.request.get_cookie("igralec1")
+    igralec1, igralec2 = bottle.request.get_cookie("igralec0", secret=SKRIVNOST), bottle.request.get_cookie("igralec1", secret=SKRIVNOST)
     if igralec1 == "igralec 1" or igralec2 == "igralec 2":
         return
     if stanje == model.ZMAGA:
@@ -32,32 +32,34 @@ def vpisi_igro(stanje, turn):
 
 @bottle.get("/")
 def zacetna_stran():
+    bottle.response.set_cookie("kvadrat", None, path="/", secret=SKRIVNOST)
     bottle.redirect("/igraj/")
 
 @bottle.get("/nova_igra/")
 def igraj():
-    bottle.response.set_cookie("vpis", "da", path="/")
+    bottle.response.set_cookie("vpis", "da", path="/", secret=SKRIVNOST)
     return bottle.template("podatki.html", vse_skupaj = vse_skupaj)
 
 @bottle.get("/new/")
 def novo():
-    bottle.response.delete_cookie("vpis", path="/")
+    bottle.response.delete_cookie("vpis", path="/", secret=SKRIVNOST)
     bottle.redirect("/igraj/")
 
 @bottle.post("/igraj/")
 def igralca():
     i1 = str(poisci_ime_igralca(vse_skupaj, "igralec0")) if poisci_ime_igralca(vse_skupaj, "igralec0") is not None else "igralec 1"
     i2 = str(poisci_ime_igralca(vse_skupaj, "igralec1")) if poisci_ime_igralca(vse_skupaj, "igralec1") is not None else "igralec 2"
-    bottle.response.set_cookie("igralec0", i1, path="/")
-    bottle.response.set_cookie("igralec1", i2, path="/")
+    bottle.response.set_cookie("igralec0", i1, path="/", secret=SKRIVNOST)
+    bottle.response.set_cookie("igralec1", i2, path="/", secret=SKRIVNOST)
     return bottle.redirect("/igra/")
 
 @bottle.get("/igraj/")
 def nova_igra():
-    id_igre = stiri_v_vrsto.nova_igra()
+    k = bottle.request.get_cookie("kvadrat", secret=SKRIVNOST) == "da"
+    id_igre = stiri_v_vrsto.nova_igra(k)
     bottle.response.set_cookie('id_igre', id_igre, path="/", secret=SKRIVNOST)
-    bottle.response.set_cookie("igralec0", "igralec 1", path="/")
-    bottle.response.set_cookie("igralec1", "igralec 2", path="/")
+    bottle.response.set_cookie("igralec0", "igralec 1", path="/", secret=SKRIVNOST)
+    bottle.response.set_cookie("igralec1", "igralec 2", path="/", secret=SKRIVNOST)
     return bottle.redirect("/igra/")
 
 @bottle.get("/igra/")
@@ -66,9 +68,9 @@ def pokazi_igro():
     igra, stanje = stiri_v_vrsto.igre[id_igre]
     plosca, figure = igra.plosca, igra.figurce()
     velikost = model.velikost_plosce
-    igralecf, igralecp = bottle.request.get_cookie(f"igralec{len(plosca) % 2}"), bottle.request.get_cookie(f"igralec{(len(plosca) + 1) % 2}")
+    igralecf, igralecp = bottle.request.get_cookie(f"igralec{len(plosca) % 2}", secret=SKRIVNOST), bottle.request.get_cookie(f"igralec{(len(plosca) + 1) % 2}", secret=SKRIVNOST)
     uporabnisko_ime = bottle.request.get_cookie("uporabnisko_ime", secret=SKRIVNOST)
-    vpis = bottle.request.get_cookie("vpis") == "da"
+    vpis = bottle.request.get_cookie("vpis", secret=SKRIVNOST) == "da"
     napaka = None
     if stanje == model.ZMAGA or len(plosca) == 16:
         vpisi_igro(stanje, len(plosca))
@@ -110,7 +112,14 @@ def navodila():
 @bottle.get("/nastavitve/")
 def nastavitve():
     uporabnisko_ime = bottle.request.get_cookie("uporabnisko_ime", secret=SKRIVNOST)
-    return bottle.template("nastavitve.html", {"uporabnisko_ime": uporabnisko_ime}) if uporabnisko_ime is not None else bottle.template("nastavitve.html")
+    kvadrat = bottle.request.get_cookie("kvadrat", secret=SKRIVNOST)
+    return bottle.template("nastavitve.html", {"uporabnisko_ime": uporabnisko_ime, "kvadrat": kvadrat}) if uporabnisko_ime is not None else bottle.template("nastavitve.html", {"kvadrat": kvadrat})
+
+@bottle.post("/nastavitve/")
+def nastavitve():
+    kvadrat = bottle.request.forms.get("kvadrat")
+    bottle.response.set_cookie("kvadrat", kvadrat, path="/", secret=SKRIVNOST)
+    return bottle.redirect("/new/")
 
 def shrani_vse_skupaj():
     vse_skupaj.v_datoteko("statistika.json")
