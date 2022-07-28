@@ -129,7 +129,7 @@ def stats():
 
 @bottle.get("/prijava/")
 def prijava_get():
-    return bottle.template("prijava.html", napaka=None)
+    return bottle.template("prijava.html", napakai=None, napakag=None)
 
 @bottle.post("/prijava/")
 def prijava_post():
@@ -139,12 +139,14 @@ def prijava_post():
     if uporabnik:
         bottle.response.set_cookie("uporabnisko_ime", uporabnisko_ime, path="/", secret=SKRIVNOST)
         bottle.redirect("/")
+    elif not vse_skupaj.poisci_uporabnika(uporabnisko_ime):
+        return bottle.template("prijava.html", napakai="To uporabniško ime ne obstaja.", napakag=None)
     else:
-        return bottle.template("prijava.html", napaka="Napačno geslo")
+        return bottle.template("prijava.html", napakai=None, napakag="Napačno geslo")
 
 @bottle.get("/registracija/")
 def prijava_get():
-    return bottle.template("registracija.html", napaka=None)
+    return bottle.template("registracija.html", napakai=None, napakag=None)
 
 @bottle.post("/registracija/")
 def prijava_post():
@@ -152,7 +154,7 @@ def prijava_post():
     geslo = bottle.request.forms.getunicode("geslo")
     for clovek in vse_skupaj.uporabniki:
         if clovek.uporabnisko_ime == uporabnisko_ime:
-            return bottle.template("registracija.html", napaka="To uporabniško ime je že zasedeno.")
+            return bottle.template("registracija.html", napakag=None, napakai="To uporabniško ime je že zasedeno.")
     if len(geslo) >= 6:
         uporabnik = statistika.Uporabnik(uporabnisko_ime, statistika.Uporabnik.zasifriraj_geslo(geslo), statistika.Igralec([]))
         vse_skupaj.uporabniki.append(uporabnik)
@@ -160,7 +162,7 @@ def prijava_post():
         bottle.response.set_cookie("uporabnisko_ime", uporabnisko_ime, path="/", secret=SKRIVNOST)
         bottle.redirect("/")
     else:
-        return bottle.template("registracija.html", napaka="Geslo mora biti dolgo najmanj 6 znakov.")
+        return bottle.template("registracija.html", napakag="Geslo mora biti dolgo najmanj 6 znakov.")
 
 @bottle.post("/odjava/")
 def odjava_post():
