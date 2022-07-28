@@ -1,6 +1,10 @@
 STEVILO_LASTNOSTI = 4
 ZMAGA = "W"
 ZACETEK = "Z"
+NAPACNA_FIGURA = "-f"
+NAPACNO_POLJE = "-p"
+ZASEDENA_FIGURA = "-fz"
+ZASEDENO_POLJE = "-pz"
 
 # Zmaga kvadrat samo za 4 lastnosti
 # Število lastnosti naj izberejo, ne vpišejo (ali pa daj navodilo in check)
@@ -87,9 +91,13 @@ class Igra:
         return False
 
     def igraj(self, figura, mesto):
+        if figura not in self.figure:
+            return ZASEDENA_FIGURA
+        if self.plosca.get(mesto) is not None:
+            return ZASEDENO_POLJE
         self.figure.remove(figura)
         self.plosca[mesto] = figura
-        if self.zmaga(mesto):
+        if self.zmaga(mesto):                
             return ZMAGA
     
     def figurce(self):
@@ -104,6 +112,18 @@ class Igra:
 
 def nova_igra():
     return Igra()
+
+def preveri_input(f, m):
+    if len(f) != STEVILO_LASTNOSTI:
+        return NAPACNA_FIGURA
+    for st in f:
+        if st not in "01":
+            return NAPACNA_FIGURA
+    if len(m) != 2:
+        return NAPACNO_POLJE
+    for koord in m:
+        if int(koord) >= velikost_plosce:
+            return NAPACNO_POLJE
 
 
 class Stiri_v_vrsto:
@@ -121,8 +141,15 @@ class Stiri_v_vrsto:
         igra = nova_igra()
         self.igre[i] = (igra, ZACETEK)
         return i
-
-    def igraj(self, i, figura, mesto):
+    
+    def igraj(self, i, f, m):
         igra, stanje = self.igre[i]
-        stanje = igra.igraj(figura, mesto)
+        s = preveri_input(f, m)
+        if s:
+            stanje = s
+        else:
+            barva, oblika, luknja, ozadje = (int(st) for st in f)
+            figura = Figura(barva, oblika, luknja, ozadje)
+            mesto = tuple(int(st) for st in m)
+            stanje = igra.igraj(figura, mesto)
         self.igre[i] = (igra, stanje)

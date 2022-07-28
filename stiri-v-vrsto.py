@@ -69,15 +69,24 @@ def pokazi_igro():
     igralecf, igralecp = bottle.request.get_cookie(f"igralec{len(plosca) % 2}"), bottle.request.get_cookie(f"igralec{(len(plosca) + 1) % 2}")
     uporabnisko_ime = bottle.request.get_cookie("uporabnisko_ime", secret=SKRIVNOST)
     vpis = bottle.request.get_cookie("vpis") == "da"
+    napaka = None
     if stanje == model.ZMAGA or len(plosca) == 16:
         vpisi_igro(stanje, len(plosca))
+    if stanje == model.NAPACNA_FIGURA:
+        napaka = "Prosim, vnesite veljavno številko figure. Katere številke so veljavne, si lahko preberete v navodilih."
+    if stanje == model.NAPACNO_POLJE:
+        napaka = "Prosim, vnesite veljavno številko polja. Katere številke so veljavne, si lahko preberete v navodilih."
+    if stanje == model.ZASEDENA_FIGURA:
+        napaka = "To figuro ste že položili na igralno površino. Izberite prosto figuro."
+    if stanje == model.ZASEDENO_POLJE:
+        napaka = "To polje je že zasedeno, zato figure ne morete položiti sem. Prosim, izberite prosto polje."
     return bottle.template(
         "igra.html",
-        {"stanje": stanje, "model": model, "plosca": plosca, "figure": figure,
+        {"stanje": stanje, "model": model, "plosca": plosca, "figure": figure, "napaka": napaka,
         "velikost": velikost, "igralecf": igralecf, "igralecp": igralecp, "uporabnisko_ime": uporabnisko_ime, "vpis": vpis}
     ) if uporabnisko_ime is not None else bottle.template(
         "igra.html",
-        {"stanje": stanje, "model": model, "plosca": plosca, "figure": figure,
+        {"stanje": stanje, "model": model, "plosca": plosca, "figure": figure,  "napaka": napaka,
         "velikost": velikost, "igralecf": igralecf, "igralecp": igralecp, "vpis": vpis}
     )
 

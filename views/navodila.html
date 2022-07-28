@@ -1,5 +1,15 @@
 % rebase('base.html', izbrani_zavihek='navodila')
 
+<script
+src="https://code.jquery.com/jquery-3.6.0.min.js"
+integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+crossorigin="anonymous"></script>
+<script>
+$(function() {
+$("#java").hide();
+});
+</script>
+
 <strong>Navodila za igro</strong>
 
 <br>
@@ -14,8 +24,41 @@ Te se razlikujejo v štirih lastnostih - vsaka figura je:
   <li class="item"> polna ali z luknjo </li>
 </ul>
 
-Ko je igralec na potezi, izbere eno izmed še neizbranih figur in jo poda nasprotniku.
-Ta jo nato postavi na igralno ploščo. Če pri tem doseže, da se štiri figure v vrsti (v stolpcu, vrstici ali na diagonali) ujemajo v eni izmed lastnosti (barva, velikost, oblika ali luknja), zmaga.
+Ko je igralec na potezi, izbere eno izmed še neizbranih figur in jo poda nasprotniku. To naredi tako, da klikne nanjo.
+Nasprotnik jo nato postavi na igralno ploščo, tako da klikne na polje, kamor jo želi postaviti. 
+Če pri tem doseže, da se štiri figure v vrsti (v stolpcu, vrstici ali na diagonali) ujemajo v eni izmed lastnosti (barva, velikost, oblika ali luknja), zmaga.
 
 Igro lahko igramo tudi tako, da je za zmago dovolj, če se figure v poljubnem kvadratku velikosti 2×2
 ujemajo v eni izmed prej naštetih lastnosti (izbirno pravilo).
+
+
+<div id="java">
+
+<br>
+
+<strong>Igra brez javascripta</strong>
+
+<br>
+
+<p>Če ne želite, da vaš računalnik za igro uporablja javascript, štiri v vrsto lahko vseeno igrate.</p>
+
+<p>V tem primeru boste na vrhu strani opazili dve polji, kamor vnesete številko figure in polja, kamor jo želite postaviti.</p>
+
+<p>Vsaki figuri pripada štirimestna številka, sestavljena iz ničel in enic. 
+Na prvem mestu stoji 0, če je figura svetla, in 1, če je temna.
+0 na drugem mestu pomeni, da je figura okrogla, 1 pa, da je kvadratna.
+Na tretjem mestu 0 stoji pri polnih figurah, 1 pa pri figurah z luknjo.
+Četrto mesto nam pove, ali ima figura ozadje (1) ali ne (0).
+Svetli, okrogli in polni figuri brez ozadja (na prvi sliki) torej pripada številka 0000, svetli, kvadratni in polni figuri z ozadjem (na drugi sliki) pa 0101.</p>
+
+<br>
+
+<img src="/static/img/0000.png" width="100" height="100">
+<img src="/static/img/0101.png" width="100" height="100">
+
+<br>
+
+To številko vnesete v prvo polje. V drugo polje vnesete številko polja, kamor želite postaviti figuro.
+Polja so oštevilčena z dvema številkama, ločenima z vejico.
+Prva števka pove številko stolpca, druga pa številko vrstice. Zgornje levo polje ima tako številko "0,0", spodnje desno pa "3,3".
+</div>

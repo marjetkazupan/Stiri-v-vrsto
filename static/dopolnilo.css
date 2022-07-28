@@ -36,6 +36,11 @@
     float: left;
 }
 
+#form-container {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
 .selected {
     border: 2pt solid;
     border-color: darkblue;
