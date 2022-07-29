@@ -2,17 +2,31 @@ from dataclasses import dataclass
 from datetime import date
 import json
 from typing import List
-from model import ZMAGA
+
+ZMAGA = "w"
+NEODLOCENO = "t"
+PORAZ = "l"
+TOCKE_ZMAGA = 3
+TOCKE_NEODLOCENO = 1
+TOCKE_PORAZ = -1
 
 
 @dataclass
 class Dvoboj:
     nasprotnik: str
-    zmaga: int
-    # v atribut zmaga bomo vnašali števila - 3 = zmaga, 1 = neodločeno, -1 = poraz
+    zmaga: str
+    # v atribut zmaga bomo vnašali konstante zmaga, poraz in neodloceno
     poteza: int
     datum: date
     zacel: bool
+
+    def tocke(self):
+        if self.zmaga == ZMAGA:
+            return TOCKE_ZMAGA
+        if self.zmaga == NEODLOCENO:
+            return TOCKE_NEODLOCENO
+        if self.zmaga == PORAZ:
+            return TOCKE_PORAZ
 
     def v_slovar(self):
         return {
@@ -38,7 +52,7 @@ class Igralec:
     dvoboji: List[Dvoboj]
 
     def rating(self):
-        return sum(dvoboj.zmaga for dvoboj in self.dvoboji)
+        return sum(dvoboj.tocke() for dvoboj in self.dvoboji)
 
     def odigrane_igre(self):
         return len(self.dvoboji)
@@ -125,14 +139,14 @@ class VseSkupaj:
         with open(ime_datoteke) as d:
             return cls.iz_slovarja(json.load(d))
 
-    def vpisi_igro(self, i1, i2, stanje, turn):
+    def vpisi_igro(self, i1, i2, zmaga, turn):
         if i1 == "igralec 1" or i2 == "igralec 2":
             return
-        if stanje == ZMAGA:
-            z1 = 3 if turn % 2 == 0 else -1
-            z2 = -1 if turn % 2 == 0 else 3
-        if stanje != ZMAGA:
-            z1 = 1
-            z2 = 1
-        self.poisci_uporabnika(i1).zgodovina.dvoboji.append(Dvoboj(nasprotnik=i2, zmaga=z1, poteza=turn, datum=date.today(), zacel=True))
-        self.poisci_uporabnika(i2).zgodovina.dvoboji.append(Dvoboj(nasprotnik=i1, zmaga=z2, poteza=turn, datum=date.today(), zacel=False))
+        if zmaga:
+            z1 = ZMAGA if turn % 2 == 0 else PORAZ
+            z2 = PORAZ if turn % 2 == 0 else ZMAGA
+        else:
+            z1 = NEODLOCENO
+            z2 = NEODLOCENO
+        self.poisci_uporabnika(i1).zgodovina.dodaj_igro(nasprotnik=i2, zmaga=z1, poteza=turn, datum=date.today(), zacel=True)
+        self.poisci_uporabnika(i2).zgodovina.dodaj_igro(nasprotnik=i1, zmaga=z2, poteza=turn, datum=date.today(), zacel=False)

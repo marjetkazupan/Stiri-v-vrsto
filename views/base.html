@@ -62,7 +62,7 @@
         <div class="navbar-end">
           <div class="navbar-item">
             <div class="buttons">
-              % if defined('uporabnisko_ime'):
+              % if defined('uporabnisko_ime') and uporabnisko_ime:
               <form method="POST" action="/odjava/">
                 <button class="button is-info is-light">
                   Odjava

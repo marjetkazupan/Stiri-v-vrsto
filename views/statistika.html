@@ -10,9 +10,9 @@
       <div class="panel-block">
         <ul>
           <li><strong>Odigrane igre:</strong> {{stat.odigrane_igre()}}</li>
-          <li><strong>Zmage:</strong> {{stat.prestej(3)}}</li>
-          <li><strong>Porazi:</strong> {{stat.prestej(-1)}}</li>
-          <li><strong>Neodločeno:</strong> {{stat.prestej(0)}}</li>
+          <li><strong>Zmage:</strong> {{stat.prestej(statistika.ZMAGA)}}</li>
+          <li><strong>Porazi:</strong> {{stat.prestej(statistika.PORAZ)}}</li>
+          <li><strong>Neodločeno:</strong> {{stat.prestej(statistika.NEODLOCENO)}}</li>
         </ul>
       </div>
     </nav>
@@ -56,9 +56,9 @@
           <td>{{dvoboj.nasprotnik}}</td>
           <td>{{dvoboj.datum}}</td>
           <td>
-            % if dvoboj.zmaga == 3:
+            % if dvoboj.zmaga == statistika.ZMAGA:
               {{ZMAGA}}
-            % elif dvoboj.zmaga == 1:
+            % elif dvoboj.zmaga == statistika.NEODLOCENO:
               {{NEODLOCENO}}
             % else:
               {{PORAZ}}
