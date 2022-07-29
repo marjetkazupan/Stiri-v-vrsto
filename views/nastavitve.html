@@ -8,7 +8,38 @@
       % else:
       <input id="switchRoundedInfo" type="checkbox" name="kvadrat" class="switch is-rounded is-info" value="da">
       % end
-      <label for="switchRoundedInfo">Switch rounded info</label>
+      <label for="switchRoundedInfo">Zmaga po kvadratkih (izbirno pravilo)</label>
+      <br>
+      <br>
+
+      <p>S kakšnimi figurami želite igrati?</p>
+      <div class="field is-horizontal figure">
+        <div class="field-body">
+          <div class="field is-narrow">
+            <div class="control">
+              % for id_slike in range(st):
+                % if id_slike == img:
+                <p>
+                  <label class="radio">
+                    <input type="radio" name="img" value="{{id_slike}}" checked>
+                    <img src="/static/img/{{id_slike}}/0000.png" class="fig" width="100" height="100">
+                    <img src="/static/img/{{id_slike}}/1111.png" class="fig" width="100" height="100">
+                  </label>
+                </p>
+                % else:
+                <p>
+                <label class="radio">
+                  <input type="radio" name="img" value="{{id_slike}}">
+                  <img src="/static/img/{{id_slike}}/0000.png" class="fig" width="100" height="100">
+                  <img src="/static/img/{{id_slike}}/1111.png" class="fig" width="100" height="100">
+                </label>
+                </p>
+                % end
+              % end
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="control stat">
         <button class="button is-info">Shrani</button>
       </div>

@@ -93,9 +93,9 @@ $("#form-container").hide();
       <tr class="vr">
       % for figura in sez:
         % if figura != 1:
-          <td class="st"><img src="/static/img/{{figura}}.png" id="{{figura}}" class="figura" width="100" height="100"></td>
+          <td class="st"><img src="/static/img/{{im}}/{{figura}}.png" id="{{figura}}" class="figura" width="100" height="100"></td>
         % else:
-          <td class="st"><img src="/static/img/1.png" class="fig" width="100" height="100"></td>
+          <td class="st"><img src="/static/img/{{im}}/1.png" class="fig" width="100" height="100"></td>
         % end
       % end
       </tr>
@@ -109,9 +109,9 @@ $("#form-container").hide();
       <tr> 
       % for i in range(velikost):
         % if plosca.get((i, j), 0) != 0:
-          <td class="st"><img src="/static/img/{{plosca.get((i, j), 0)}}.png" width="100" height="100"></td> 
+          <td class="st"><img src="/static/img/{{im}}/{{plosca.get((i, j), 0)}}.png" width="100" height="100"></td> 
         % else:
-          <td class="st"><img src="/static/img/0.png" class="polje" id="{{i}},{{j}}" width="100" height="100"></td>
+          <td class="st"><img src="/static/img/{{im}}/0.png" class="polje" id="{{i}},{{j}}" width="100" height="100"></td>
         % end
       % end
       </tr>
@@ -120,7 +120,7 @@ $("#form-container").hide();
   </div>
 </div>
 
-<form action="/new/" method="get">
+<form action="/igraj/" method="get">
   <div class="nova_igra">
     <button type="submit" class="button is-medium is-info is-light">Nova igra</button>
   </div>

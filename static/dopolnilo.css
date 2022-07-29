@@ -63,10 +63,19 @@
 .igraj {
     padding-left: 200px;
     padding-bottom: 20px;
+    padding-top: 20px;
 }
 
 .stat {
     padding-top: 10px;
     padding-bottom: 30px;
     padding-left: 150px;
+}
+
+.figure {
+    margin-top: 10px;
+}
+
+.navodila {
+    margin-bottom: 20px;
 }

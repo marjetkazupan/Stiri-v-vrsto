@@ -1,4 +1,4 @@
-import bottle, model, statistika, datetime
+import bottle, model, statistika
 
 
 SKRIVNOST = "To je skrivnost."
@@ -7,54 +7,45 @@ NASPROTNIK = "nasprotnik"
 ZMAGA = "w"
 NEODLOCENO = "t"
 PORAZ = "l"
+DATOTEKA = "statistika.json"
+STEVILO_IMG = 2
 
 stiri_v_vrsto = model.Stiri_v_vrsto()
-vse_skupaj = statistika.VseSkupaj.iz_datoteke("statistika.json")
+vse_skupaj = statistika.VseSkupaj.iz_datoteke(DATOTEKA)
 
 def poisci_ime_igralca(vse_skupaj, ime_polja):
     id_igralca = bottle.request.forms.get(ime_polja)
     return vse_skupaj.uporabniki[int(id_igralca)].uporabnisko_ime if id_igralca else None
 
-def vpisi_igro(stanje, turn):
-    igralec1, igralec2 = bottle.request.get_cookie("igralec0", secret=SKRIVNOST), bottle.request.get_cookie("igralec1", secret=SKRIVNOST)
-    if igralec1 == "igralec 1" or igralec2 == "igralec 2":
-        return
-    if stanje == model.ZMAGA:
-        z1 = 3 if turn % 2 == 0 else -1
-        z2 = -1 if turn % 2 == 0 else 3
-        vse_skupaj.poisci_uporabnika(igralec1).zgodovina.dvoboji.append(statistika.Dvoboj(nasprotnik=igralec2, zmaga=z1, poteza=turn, datum=datetime.date.today(), zacel=True))
-        vse_skupaj.poisci_uporabnika(igralec2).zgodovina.dvoboji.append(statistika.Dvoboj(nasprotnik=igralec1, zmaga=z2, poteza=turn, datum=datetime.date.today(), zacel=False))
-        shrani_vse_skupaj()
-    if stanje != model.ZMAGA:
-        vse_skupaj.poisci_uporabnika(igralec1).zgodovina.dvoboji.append(statistika.Dvoboj(nasprotnik=igralec2, zmaga=1, poteza=turn, datum=datetime.date.today(), zacel=True))
-        vse_skupaj.poisci_uporabnika(igralec2).zgodovina.dvoboji.append(statistika.Dvoboj(nasprotnik=igralec1, zmaga=1, poteza=turn, datum=datetime.date.today(), zacel=False))
-        shrani_vse_skupaj()
+def shrani_vse_skupaj():
+    vse_skupaj.v_datoteko(DATOTEKA)
 
 @bottle.get("/")
 def zacetna_stran():
     bottle.response.set_cookie("kvadrat", None, path="/", secret=SKRIVNOST)
+    bottle.response.set_cookie("img", "0", path="/", secret=SKRIVNOST)
     bottle.redirect("/igraj/")
 
 @bottle.get("/nova_igra/")
 def igraj():
-    bottle.response.set_cookie("vpis", "da", path="/", secret=SKRIVNOST)
-    return bottle.template("podatki.html", vse_skupaj = vse_skupaj)
-
-@bottle.get("/new/")
-def novo():
-    bottle.response.delete_cookie("vpis", path="/", secret=SKRIVNOST)
-    bottle.redirect("/igraj/")
+    return bottle.template("podatki.html", vse_skupaj=vse_skupaj, napaka=None)
 
 @bottle.post("/igraj/")
 def igralca():
-    i1 = str(poisci_ime_igralca(vse_skupaj, "igralec0")) if poisci_ime_igralca(vse_skupaj, "igralec0") is not None else "igralec 1"
-    i2 = str(poisci_ime_igralca(vse_skupaj, "igralec1")) if poisci_ime_igralca(vse_skupaj, "igralec1") is not None else "igralec 2"
+    i1 = str(poisci_ime_igralca(vse_skupaj, "igralec0"))
+    i2 = str(poisci_ime_igralca(vse_skupaj, "igralec1"))
+    if i1 == i2:
+        return bottle.template("podatki.html", vse_skupaj=vse_skupaj, napaka="Prosim, izberite dva različna igralca. Ne morete igrati sami proti sebi.")
+    if i1 == None or i2 == None:
+        return bottle.template("podatki.html", vse_skupaj=vse_skupaj, napaka="Prosim, izberite igralca.")
+    bottle.response.set_cookie("vpis", "da", path="/", secret=SKRIVNOST)
     bottle.response.set_cookie("igralec0", i1, path="/", secret=SKRIVNOST)
     bottle.response.set_cookie("igralec1", i2, path="/", secret=SKRIVNOST)
     return bottle.redirect("/igra/")
 
 @bottle.get("/igraj/")
 def nova_igra():
+    bottle.response.delete_cookie("vpis", path="/", secret=SKRIVNOST)
     k = bottle.request.get_cookie("kvadrat", secret=SKRIVNOST) == "da"
     id_igre = stiri_v_vrsto.nova_igra(k)
     bottle.response.set_cookie('id_igre', id_igre, path="/", secret=SKRIVNOST)
@@ -71,24 +62,19 @@ def pokazi_igro():
     igralecf, igralecp = bottle.request.get_cookie(f"igralec{len(plosca) % 2}", secret=SKRIVNOST), bottle.request.get_cookie(f"igralec{(len(plosca) + 1) % 2}", secret=SKRIVNOST)
     uporabnisko_ime = bottle.request.get_cookie("uporabnisko_ime", secret=SKRIVNOST)
     vpis = bottle.request.get_cookie("vpis", secret=SKRIVNOST) == "da"
-    napaka = None
+    napaka = model.doloci_napako(stanje)
+    im = bottle.request.get_cookie("img", secret=SKRIVNOST)
     if stanje == model.ZMAGA or len(plosca) == 16:
-        vpisi_igro(stanje, len(plosca))
-    if stanje == model.NAPACNA_FIGURA:
-        napaka = "Prosim, vnesite veljavno številko figure. Katere številke so veljavne, si lahko preberete v navodilih."
-    if stanje == model.NAPACNO_POLJE:
-        napaka = "Prosim, vnesite veljavno številko polja. Katere številke so veljavne, si lahko preberete v navodilih."
-    if stanje == model.ZASEDENA_FIGURA:
-        napaka = "To figuro ste že položili na igralno površino. Izberite prosto figuro."
-    if stanje == model.ZASEDENO_POLJE:
-        napaka = "To polje je že zasedeno, zato figure ne morete položiti sem. Prosim, izberite prosto polje."
+        i1, i2 = bottle.request.get_cookie("igralec0", secret=SKRIVNOST), bottle.request.get_cookie("igralec1", secret=SKRIVNOST)
+        vse_skupaj.vpisi_igro(i1, i2, stanje, len(plosca))
+        shrani_vse_skupaj()
     return bottle.template(
         "igra.html",
-        {"stanje": stanje, "model": model, "plosca": plosca, "figure": figure, "napaka": napaka,
+        {"stanje": stanje, "model": model, "plosca": plosca, "figure": figure, "napaka": napaka, "im": im,
         "velikost": velikost, "igralecf": igralecf, "igralecp": igralecp, "uporabnisko_ime": uporabnisko_ime, "vpis": vpis}
     ) if uporabnisko_ime is not None else bottle.template(
         "igra.html",
-        {"stanje": stanje, "model": model, "plosca": plosca, "figure": figure,  "napaka": napaka,
+        {"stanje": stanje, "model": model, "plosca": plosca, "figure": figure,  "napaka": napaka, "im": im,
         "velikost": velikost, "igralecf": igralecf, "igralecp": igralecp, "vpis": vpis}
     )
 
@@ -107,22 +93,24 @@ def slika(ime_datoteke):
 @bottle.get("/navodila/")
 def navodila():
     uporabnisko_ime = bottle.request.get_cookie("uporabnisko_ime", secret=SKRIVNOST)
-    return bottle.template("navodila.html", {"uporabnisko_ime": uporabnisko_ime}) if uporabnisko_ime is not None else bottle.template("navodila.html")
+    im = bottle.request.get_cookie("img", secret=SKRIVNOST)
+    return bottle.template("navodila.html", {"uporabnisko_ime": uporabnisko_ime, "im": im}) if uporabnisko_ime is not None else bottle.template("navodila.html", {"im": im})
 
 @bottle.get("/nastavitve/")
 def nastavitve():
+    st = STEVILO_IMG
     uporabnisko_ime = bottle.request.get_cookie("uporabnisko_ime", secret=SKRIVNOST)
     kvadrat = bottle.request.get_cookie("kvadrat", secret=SKRIVNOST)
-    return bottle.template("nastavitve.html", {"uporabnisko_ime": uporabnisko_ime, "kvadrat": kvadrat}) if uporabnisko_ime is not None else bottle.template("nastavitve.html", {"kvadrat": kvadrat})
+    im = int(bottle.request.get_cookie("img", secret=SKRIVNOST))
+    return bottle.template("nastavitve.html", {"uporabnisko_ime": uporabnisko_ime, "kvadrat": kvadrat, "img": im, "st": st}) if uporabnisko_ime is not None else bottle.template("nastavitve.html", {"kvadrat": kvadrat, "img": im, "st": st})
 
 @bottle.post("/nastavitve/")
 def nastavitve():
     kvadrat = bottle.request.forms.get("kvadrat")
+    img = bottle.request.forms.get("img")
     bottle.response.set_cookie("kvadrat", kvadrat, path="/", secret=SKRIVNOST)
-    return bottle.redirect("/new/")
-
-def shrani_vse_skupaj():
-    vse_skupaj.v_datoteko("statistika.json")
+    bottle.response.set_cookie("img", img, path="/", secret=SKRIVNOST)
+    return bottle.redirect("/igraj/")
 
 @bottle.get("/statistika/")
 def stats():
