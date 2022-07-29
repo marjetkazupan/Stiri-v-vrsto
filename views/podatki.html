@@ -13,6 +13,9 @@
       <div class="izbira">
         % include('_izberi_igralca.html', name='igralec1', oznaka='Igralec 2')
       </div>
+      % if napaka:
+      <p class="help is-danger">{{ napaka }}</p>
+      % end
       <div class="control igraj">
         <button class="button is-info">Igraj</button>
       </div>

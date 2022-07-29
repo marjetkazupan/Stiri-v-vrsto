@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from datetime import date
 import json
 from typing import List
+from model import ZMAGA
 
 
 @dataclass
@@ -123,3 +124,15 @@ class VseSkupaj:
     def iz_datoteke(cls, ime_datoteke):
         with open(ime_datoteke) as d:
             return cls.iz_slovarja(json.load(d))
+
+    def vpisi_igro(self, i1, i2, stanje, turn):
+        if i1 == "igralec 1" or i2 == "igralec 2":
+            return
+        if stanje == ZMAGA:
+            z1 = 3 if turn % 2 == 0 else -1
+            z2 = -1 if turn % 2 == 0 else 3
+        if stanje != ZMAGA:
+            z1 = 1
+            z2 = 1
+        self.poisci_uporabnika(i1).zgodovina.dvoboji.append(Dvoboj(nasprotnik=i2, zmaga=z1, poteza=turn, datum=date.today(), zacel=True))
+        self.poisci_uporabnika(i2).zgodovina.dvoboji.append(Dvoboj(nasprotnik=i1, zmaga=z2, poteza=turn, datum=date.today(), zacel=False))

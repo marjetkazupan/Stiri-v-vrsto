@@ -125,6 +125,16 @@ def preveri_input(f, m):
         if int(koord) >= velikost_plosce:
             return NAPACNO_POLJE
 
+def doloci_napako(stanje):
+    if stanje == NAPACNA_FIGURA:
+        return "Prosim, vnesite veljavno številko figure. Katere številke so veljavne, si lahko preberete v navodilih."
+    if stanje == NAPACNO_POLJE:
+        return "Prosim, vnesite veljavno številko polja. Katere številke so veljavne, si lahko preberete v navodilih."
+    if stanje == ZASEDENA_FIGURA:
+        return "To figuro ste že položili na igralno površino. Izberite prosto figuro."
+    if stanje == ZASEDENO_POLJE:
+        return "To polje je že zasedeno, zato figure ne morete položiti sem. Prosim, izberite prosto polje."
+
 
 class Stiri_v_vrsto:
     def __init__(self) -> None:
