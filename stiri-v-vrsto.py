@@ -7,7 +7,7 @@ NASPROTNIK = "nasprotnik"
 ZMAGA = "w"
 NEODLOCENO = "t"
 PORAZ = "l"
-DATOTEKA = "statistika.json"
+DATOTEKA = "stat.json"
 STEVILO_IMG = 2
 
 stiri_v_vrsto = model.Stiri_v_vrsto()
@@ -75,7 +75,7 @@ def pokazi_igro():
         "velikost": velikost, "igralecf": igralecf, "igralecp": igralecp, "uporabnisko_ime": uporabnisko_ime, "vpis": vpis}
     )
 
-@bottle.post("/igra/")
+@bottle.post("/igraa/")
 def igraj():
     id_igre = bottle.request.get_cookie('id_igre', secret=SKRIVNOST)
     f = bottle.request.forms.get("figura")

@@ -154,6 +154,8 @@ class Stiri_v_vrsto:
     
     def igraj(self, i, f, m):
         igra, stanje = self.igre[i]
+        if stanje == ZMAGA:
+            return
         s = preveri_input(f, m)
         if s:
             stanje = s

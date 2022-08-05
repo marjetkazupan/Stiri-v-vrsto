@@ -1,0 +1,128 @@
+{
+    "uporabniki": [
+        {
+            "uporabnisko_ime": "admin",
+            "zasifrirano_geslo": "zajmesot",
+            "zgodovina": {
+                "dvoboji": [
+                    {
+                        "nasprotnik": "ana",
+                        "zmaga": "w",
+                        "poteza": 4,
+                        "datum": "2022-07-26",
+                        "zacel": true
+                    },
+                    {
+                        "nasprotnik": "ana",
+                        "zmaga": "w",
+                        "poteza": 13,
+                        "datum": "2022-08-05",
+                        "zacel": false
+                    }
+                ]
+            }
+        },
+        {
+            "uporabnisko_ime": "ana",
+            "zasifrirano_geslo": "edogajadaramiana",
+            "zgodovina": {
+                "dvoboji": [
+                    {
+                        "nasprotnik": "admin",
+                        "zmaga": "l",
+                        "poteza": 4,
+                        "datum": "2022-07-26",
+                        "zacel": false
+                    },
+                    {
+                        "nasprotnik": "vsepremagam",
+                        "zmaga": "w",
+                        "poteza": 16,
+                        "datum": "2022-08-05",
+                        "zacel": true
+                    },
+                    {
+                        "nasprotnik": "hana",
+                        "zmaga": "t",
+                        "poteza": 16,
+                        "datum": "2022-08-05",
+                        "zacel": true
+                    },
+                    {
+                        "nasprotnik": "admin",
+                        "zmaga": "l",
+                        "poteza": 13,
+                        "datum": "2022-08-05",
+                        "zacel": true
+                    }
+                ]
+            }
+        },
+        {
+            "uporabnisko_ime": "najboljsiigralec",
+            "zasifrirano_geslo": "olseg",
+            "zgodovina": {
+                "dvoboji": [
+                    {
+                        "nasprotnik": "hana",
+                        "zmaga": "l",
+                        "poteza": 16,
+                        "datum": "2022-08-05",
+                        "zacel": false
+                    }
+                ]
+            }
+        },
+        {
+            "uporabnisko_ime": "hana",
+            "zasifrirano_geslo": "icnahicnah",
+            "zgodovina": {
+                "dvoboji": [
+                    {
+                        "nasprotnik": "vsepremagam",
+                        "zmaga": "l",
+                        "poteza": 7,
+                        "datum": "2022-07-06",
+                        "zacel": true
+                    },
+                    {
+                        "nasprotnik": "ana",
+                        "zmaga": "t",
+                        "poteza": 16,
+                        "datum": "2022-08-05",
+                        "zacel": false
+                    },
+                    {
+                        "nasprotnik": "najboljsiigralec",
+                        "zmaga": "w",
+                        "poteza": 16,
+                        "datum": "2022-08-05",
+                        "zacel": true
+                    }
+                ]
+            }
+        },
+        {
+            "uporabnisko_ime": "vsepremagam",
+            "zasifrirano_geslo": "moblagamz",
+            "zgodovina": {
+                "dvoboji": [
+                    {
+                        "nasprotnik": "hana",
+                        "zmaga": "w",
+                        "poteza": 7,
+                        "datum": "2022-07-06",
+                        "zacel": false
+                    },
+                    {
+                        "nasprotnik": "ana",
+                        "zmaga": "l",
+                        "poteza": 16,
+                        "datum": "2022-08-05",
+                        "zacel": false
+                    }
+                ]
+            }
+        }
+    ]
+}

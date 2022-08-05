@@ -51,7 +51,7 @@
         </tr>
       </thead>
       <tbody>
-        % for dvoboj in sorted(stat.dvoboji, key=lambda dvoboj: dvoboj.datum, reverse=True):
+        % for dvoboj in stat.dvoboji[::-1]:
         <tr>
           <td>{{dvoboj.nasprotnik}}</td>
           <td>{{dvoboj.datum}}</td>

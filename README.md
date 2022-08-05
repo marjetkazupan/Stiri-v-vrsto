@@ -8,3 +8,12 @@ Pred Vami je igra za dva igralca, a to ni igra *štiri v vrsto*, ki ste je vajen
 ## Navodila za zagon
 
 Prenesite vse datoteke in poženite datoteko *stiri-v-vrsto.py*. Uživajte v igri na spletnem naslovu http://127.0.0.1:8080.
+
+Vključena je datoteka stat.json, ki sem jo ustvarila za namen preizkušanja prijave, registracije, igre med registriranima uporabnikoma in ogleda statistike. Registrirani so uporabniki:
+- admin, geslo *tosemjaz*
+- ana, geslo *anaimaradajagode*
+- hana, geslo *hancihanci*
+- najboljsiigralec, geslo *geslo*
+- vsepremagam, geslo *zmagalbom*
+
+Datoteka z resničnimi podatki uporabnikov se imenuje statistika.py in je vključena v .gitignore.
