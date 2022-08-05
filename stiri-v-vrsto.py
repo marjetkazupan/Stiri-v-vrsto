@@ -1,7 +1,8 @@
 import bottle, model, statistika
 
 
-SKRIVNOST = "To je skrivnost."
+with open("skrivnost.txt") as d:
+    SKRIVNOST = d.read()
 JAZ = "jaz"
 NASPROTNIK = "nasprotnik"
 ZMAGA = "w"
