@@ -76,7 +76,7 @@ def pokazi_igro():
         "velikost": velikost, "igralecf": igralecf, "igralecp": igralecp, "uporabnisko_ime": uporabnisko_ime, "vpis": vpis}
     )
 
-@bottle.post("/igraa/")
+@bottle.post("/igra/")
 def igraj():
     id_igre = bottle.request.get_cookie('id_igre', secret=SKRIVNOST)
     f = bottle.request.forms.get("figura")
