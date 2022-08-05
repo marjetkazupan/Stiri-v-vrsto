@@ -6,8 +6,6 @@ NAPACNO_POLJE = "-p"
 ZASEDENA_FIGURA = "-fz"
 ZASEDENO_POLJE = "-pz"
 
-# Zmaga kvadrat samo za 4 lastnosti
-# Število lastnosti naj izberejo, ne vpišejo (ali pa daj navodilo in check)
 
 velikost_plosce = 2 ** (STEVILO_LASTNOSTI // 2)
 

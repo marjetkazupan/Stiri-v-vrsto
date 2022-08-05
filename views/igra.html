@@ -77,7 +77,7 @@ $("#form-container").hide();
 <p>Figuro izbira: <strong>{{igralecf}}</strong>. Prosim, izberi figuro, ki jo želiš podati nasprotniku.</p>
 <p>Polje izbira: <strong>{{igralecp}}</strong>. Prosim, izberi polje, kamor želiš postaviti ponujeno figuro.</p>
 <div id="form-container">
-  <form action="/igraa/" method="post" id="form">
+  <form action="/igra/" method="post" id="form">
     <input name="figura" placeholder="številka figure" autofocus> <input name="mesto" placeholder="številka polja" autofocus> <input type="submit" value="Potrdi">
   </form>
   % if napaka:

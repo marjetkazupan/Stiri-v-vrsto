@@ -91,9 +91,6 @@ class Uporabnik:
     def preveri_geslo(self, geslo_v_cistopisu):
         return self.zasifriraj_geslo(geslo_v_cistopisu) == self.zasifrirano_geslo
 
-    def nastavi_novo_geslo(self, geslo_v_cistopisu):
-        self.zasifrirano_geslo = self.zasifriraj_geslo(geslo_v_cistopisu)
-
     def v_slovar(self):
         return {
             "uporabnisko_ime": self.uporabnisko_ime,

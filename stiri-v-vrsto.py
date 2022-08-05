@@ -162,4 +162,4 @@ def odjava_post():
     bottle.response.delete_cookie("uporabnisko_ime", path="/", secret=SKRIVNOST)
     bottle.redirect("/")
 
-bottle.run(reloader=True, debug=True)
+bottle.run(reloader=True)
